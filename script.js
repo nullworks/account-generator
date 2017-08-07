@@ -38,7 +38,7 @@ function PushAccount(acc) {
 }
 
 function fetchAccountList() {
-	request(SERVER + "list/" + $("#list-page").val() + "/20", function(e, r, b) {
+	request(SERVER + "list/" + $("#list-page").val() * 20 + "/20", function(e, r, b) {
 		if (e) {
 			console.log(e);
 			return;	
@@ -201,6 +201,20 @@ $("#next-account").on("click", function() {
 	AutoGenerateFields();
 });
 $("#list-refresh").on("click", fetchAccountList);
+$("#list-prev").on("click", function() {
+	var p = parseInt($("#list-page").val());
+	if (isNaN(p) || !isFinite(p)) p = 0;
+	if (p > 0) p--;
+	$("#list-page").val(p)
+	fetchAccountList();
+});
+$("#list-next").on("click", function() {	
+	var p = parseInt($("#list-page").val());
+	if (isNaN(p) || !isFinite(p)) p = 0;
+	p++;
+	$("#list-page").val(p)
+	fetchAccountList();
+});
 
 status = $("#status");
 $("#avatar-img").attr("src", $("#avatar").val());

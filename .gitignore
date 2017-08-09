@@ -1,6 +1,7 @@
 node_modules/*
-accounts.json
+accounts*.json*
 main_.js
 script_.js
 public/script.min.js
 npm-debug.log
+backups/*

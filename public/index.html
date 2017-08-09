@@ -57,14 +57,10 @@
 			</tr>
 		</table>
 		<hr>
-		<div id="captcha-container">
-			<img id="captcha-img">
-			<input id="captcha" type="text" placeholder="CAPTCHA">
-		</div>
 		<br/>
 		<input id="cb-community" type="checkbox" checked>Setup community profile<br/>
 		<div id="community-container">
-		<div id="community">
+		<div id="community" class="outlined">
 			<input id="cb-group" type="checkbox">Join steam group <input id="group" type="text" placeholder="" value=""><br/>
 			<table>
 			<tr>
@@ -109,7 +105,7 @@
 	<div id="container-right">
 		<h2>List of generated accounts</h2>
 		<hr/>
-		<table id="list">
+		<table id="list" class="monospace-table">
 			<tbody>				
 				<tr id="list-header">
 					<td>Username</td>
@@ -128,6 +124,35 @@
 			<input id="list-refresh" type="button" value="Refresh">
 			<br>
 			<span id="list-info">Showing accounts <span id="list-info-first">0</span>..<span id="list-info-last">0</span> out of <span id="list-info-total">0</span></span>
+		</div>
+		<h2>Continious Generation</h2>
+		<hr/>
+		<div id="cg-status">
+			CG is <span id="cg-active" class="bad-text">disabled</span> and has <span id="cg-count">0</span> account(s) available.
+		</div>
+		<input id="cg-start" value="Start CG" type="button">
+		<input id="cg-stop" value="Stop CG" type="button">
+		<input id="cg-refresh" value="Refresh" type="button">
+		<input id="cg-pop" value="Pop" type="button">
+		<input id="cg-login" value="Login" type="button">
+		<br/>
+		<div id="cg-popped-account" class="hidden outlined">
+			<span>Last popped account</span>
+			<br/>
+			<table id="cg-account" class="monospace-table table-left-bold">
+				<tr>
+					<td>Login</td>
+					<td id="cg-acc-login">unknown</td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td id="cg-acc-password">unknown</td>
+				</tr>
+				<tr>
+					<td>Profile</td>
+					<td id="cg-acc-profile">unknown</td>
+				</tr>
+			</table>
 		</div>
 	</div>
 </body>

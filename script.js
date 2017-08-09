@@ -12,7 +12,7 @@ var status;
 function LoginButtonCallback() {
 	var tr = $(this).parent().parent();
 	var username = tr.find(":nth-child(2)").text();
-	var password = tr.find(":nth-child(3)").text();
+	var password = tr.find(":nth-child(3)").attr("data-pwd");
 	StartSteam(username, password);
 }
 
@@ -25,7 +25,18 @@ function PushAccount(acc) {
 	var tr = $("<tr></tr>");
 	tr.append($("<td></td>").text(acc.username));
 	tr.append($("<td></td>").text(acc.login));
-	tr.append($("<td></td>").text(acc.password));
+	var passwd = $("<td></td>").attr("data-pwd", acc.password).text("< HIDDEN >").attr("data-shown", "0");
+	passwd.on("click", function() {
+		var t = $(this);
+		if (t.attr("data-shown") == "1") return;
+		t.attr("data-shown", "1");
+		t.text(t.attr("data-pwd"));
+		setTimeout(function() {
+			t.attr("data-shown", "0");
+			t.text("< HIDDEN >");
+		}, 5000);
+	});
+	tr.append(passwd);
 	if (acc.customURL) {
 		tr.append($("<td></td>").append($("<a></a>").attr("href", "https://steamcommunity.com/id/" + acc.customURL).attr("target", "_blank").text(acc.customURL)));
 	} else {
@@ -67,31 +78,13 @@ function CheckCustomURL() {
 	});
 }
 
-function RefreshCaptcha() {
-	$("#captcha-img").attr("src", "").attr("class", "progress");
-	request(SERVER + "captcha", function(err, res, body) {
-		if (res.statusCode != 200) {
-			console.log("Internal server error?");
-			$("#captcha-img").attr("class", "bad");
-			return;
-		}
-		$("#captcha-img").attr("src", "https://store.steampowered.com/public/captcha.php?gid=" + body).attr("class", "good");
-		gid = body;
-		$("#captcha").val("");
-	});
-}
-
 function MakeAccount() {
 	var acc = ValidateAndStoreFields();
 	if (acc) {
 		status.text("Creating account");
 		request.post({
 			url: SERVER + "create", 
-			body: JSON.stringify({
-				acc: acc,
-				gid: gid,
-				captcha: $("#captcha").val()
-			}),
+			body: JSON.stringify(acc),
 			headers: {
 				"Content-Type": "application/json"
 			}
@@ -100,6 +93,8 @@ function MakeAccount() {
 			if (r.statusCode == 200) {
 				status.text("Account created successfully!");
 				fetchAccountList();
+				accountSequenceNumber++;
+				AutoGenerateFields();
 			} else {
 				status.text("Account creation failed");
 			}
@@ -134,7 +129,7 @@ function ValidateAndStoreFields() {
 		if ($("#cb-avatar").prop("checked")) {
 			account.avatar = $("#avatar").val();
 		}
-		if ($("#cb-summary").prop("checked")) {
+		if ($("#cb-summary").prop("checked") && $("#ta-summary").val().length) {
 			account.summary = $("#ta-summary").val();
 		}
 	}
@@ -162,6 +157,19 @@ function AutoGenerateFields() {
 	$("#number").val(accountSequenceNumber);
 }
 
+function fetchCGStatus() {
+	request(SERVER + "cg/status", function(e, r, b) {
+		if (e) {
+			$("#cg-active").text("broken").attr("class", "bad-text");
+			console.log(e);
+			return;	
+		}
+		var data = JSON.parse(b);
+		$("#cg-active").text(data.active ? "enabled" : "disabled").attr("class", data.active ? "good-text" : "bad-text");
+		$("#cg-count").text(data.accounts.count);
+	});
+}
+
 $(() => {
 
 console.log($("#table-user input"));
@@ -185,10 +193,6 @@ $("#number").on("input", function() {
 	AutoGenerateFields();
 });
 
-$("#captcha-img").on("click", function() {
-	RefreshCaptcha();
-});
-
 $(window).bind("beforeunload", function() {
 	localStorage.accounts = JSON.stringify(accounts);
 });
@@ -197,7 +201,6 @@ $("#create").on("click", MakeAccount);
 $("#custom-url-check").on("click", CheckCustomURL);
 $("#next-account").on("click", function() {
 	accountSequenceNumber++;
-	RefreshCaptcha();
 	AutoGenerateFields();
 });
 $("#list-refresh").on("click", fetchAccountList);
@@ -216,9 +219,42 @@ $("#list-next").on("click", function() {
 	fetchAccountList();
 });
 
+$("#cg-start").on("click", function() {
+	request(SERVER + "cg/start", function() {
+		fetchCGStatus();
+	});
+});
+$("#cg-stop").on("click", function() {
+	request(SERVER + "cg/stop", function() {
+		fetchCGStatus();
+	});
+});
+$("#cg-refresh").on("click", fetchCGStatus);
+$("#cg-pop").on("click", function() {
+	request(SERVER + "cg/pop", function(e, r, b) {
+		fetchCGStatus();
+		if (e) {
+			console.log(e);
+			return;
+		}
+		var data = JSON.parse(b);
+		$("#cg-acc-login").text(data.account.login);
+		$("#cg-acc-password").text(data.account.password);
+		$("#cg-acc-profile").html($("<a></a>").attr("href", "https://steamcommunity.com/profiles/" + data.account.steamID).text("Link"));
+		$("#cg-popped-account").removeClass("hidden");
+	});
+});
+$("#cg-login").on("click", function() {
+	var username = $("#cg-acc-login").text();
+	var password = $("#cg-acc-password").text();
+	StartSteam(username, password);
+});
+
 status = $("#status");
 $("#avatar-img").attr("src", $("#avatar").val());
-RefreshCaptcha();
+// Update CG status every 30 seconds
+setInterval(fetchCGStatus, 30 * 1000);
+fetchCGStatus();
 AutoGenerateFields();
 fetchAccountList();
 	

@@ -17,6 +17,8 @@
     "jsonfile": "^3.0.1",
     "pad-number": "0.0.4",
     "randexp": "^0.4.5",
-    "steamcommunity": "^3.31.0"
+    "steam-user": "^3.21.7",
+    "steamcommunity": "^3.31.0",
+    "underscore": "^1.8.3"
   }
 }

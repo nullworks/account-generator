@@ -142,6 +142,9 @@ img {
 .bad {
 	border-color: #a94847;
 }
+.bad-text {
+	color: #a94847;
+}
 
 .progress {
 	border-color: #d8c943;
@@ -150,6 +153,16 @@ img {
 .good {
 	border-color: #7dbc7a;
 }
+.good-text {
+	color: #7dbc7a;
+}
+
+#cg-popped-account {
+	display: inline-block;
+	padding: 3px;
+}
+
+.hidden { display: none !important }
 
 #container, #container-right {
 	display: inline-block;
@@ -164,9 +177,6 @@ img {
 	box-sizing: border-box;
 	width: 100%;
 	display: inline-block;
-	background: rgba(0,0,0,0.2);
-	border: 1px solid rgba(0,0,0,0.8);
-	border-radius: 3px;
 	padding: 3px;
 }
 
@@ -174,9 +184,22 @@ img {
 	opacity: 0.4;
 }
 
+.outlined {
+	background: rgba(0,0,0,0.2);
+	border: 1px solid rgba(0,0,0,0.8);
+	border-radius: 3px;
+}
+
+.table-left-bold tr td:first-child {
+	font-weight: bold;
+}
+
+.monospace-table tr td {
+	font-family: monospace;
+}
+
 #list tr td {
 	padding: 1px 5px;
-	font-family: monospace;
 }
 
 #list-controls {

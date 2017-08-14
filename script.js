@@ -52,7 +52,7 @@ function fetchAccountList() {
 	request(SERVER + "list/" + $("#list-page").val() * 20 + "/20", function(e, r, b) {
 		if (e) {
 			console.log(e);
-			return;	
+			return;
 		}
 		var data = JSON.parse(b);
 		$("#list tr").slice(1).remove();
@@ -83,7 +83,7 @@ function MakeAccount() {
 	if (acc) {
 		status.text("Creating account");
 		request.post({
-			url: SERVER + "create", 
+			url: SERVER + "create",
 			body: JSON.stringify(acc),
 			headers: {
 				"Content-Type": "application/json"
@@ -161,19 +161,54 @@ function fetchCGStatus() {
 	request(SERVER + "cg/status", function(e, r, b) {
 		try {
 			var data = JSON.parse(b);
-			$("#cg-active").text(data.active ? "enabled" : "disabled").attr("class", data.active ? "good-text" : "bad-text");
+			$("#cg-active").text(data.active ? "enabled" : "disabled").attr("class", data.active ? "good" : "bad");
 			$("#cg-count").text(data.accounts.count);
 			$("#cg-used").text(data.accounts.used);
 			$("#cg-interval").text(Math.floor(data.timeout / 1000));
 		} catch (e) {
-			$("#cg-active").text("unavailable").attr("class", "bad-text");
+			$("#cg-active").text("unavailable").attr("class", "bad");
 			console.log(e);
-			return;	
+			return;
 		}
 	});
 }
 
 $(() => {
+
+$('select').each(function() {
+	var self = $(this);
+	self.addClass('vgui-select-hidden');
+	self.wrap('<div class="nopad vgui-select-container noselect"></div>');
+	var el = $('<div class="nopad vgui-select"></div>');
+	self.after(el);
+	el.append('<div class="nopad vgui-select-text">Select</div>');
+	var list = $('<ul class="vgui-select-list vgui-outset"></ul>');
+	list.hide();
+	el.on('click', function(event) {
+		event.stopPropagation();
+		el.addClass('vgui-select-active');
+		list.show();
+	});
+	el.append(list);
+	self.find('option').each(function() {
+		var opt = $('<li />');
+		opt.addClass('vgui-select-option');
+		opt.attr('data-value', $(this).val());
+		opt.text($(this).text());
+		opt.on('click', function() {
+			event.stopPropagation();
+			el.attr('data-value', $(this).attr('data-value'));
+			el.find('.vgui-select-text').text($(this).text());
+			el.removeClass('vgui-select-active');
+			list.hide();
+		});
+		list.append(opt);
+	});
+	$(document).on('click', function() {
+		el.removeClass('vgui-select-active');
+		list.hide();
+	});
+});
 
 console.log($("#table-user input"));
 
@@ -181,6 +216,7 @@ $("#table-user input").on("input", AutoGenerateFields);
 
 $("#custom-url").on("input", function() {
 	$(this).val($(this).val().replace(/[^a-z0-9_]/gi, ''));
+	$(this).removeClass('good bad').addClass('progress');
 });
 
 $("#avatar").on("input", function() {
@@ -191,7 +227,7 @@ $("#number").on("input", function() {
 	var nn = accountSequenceNumber;
 	try {
 		nn = parseInt($(this).val());
-	} catch(e) {}	
+	} catch(e) {}
 	accountSequenceNumber = nn;
 	AutoGenerateFields();
 });
@@ -214,7 +250,7 @@ $("#list-prev").on("click", function() {
 	$("#list-page").val(p)
 	fetchAccountList();
 });
-$("#list-next").on("click", function() {	
+$("#list-next").on("click", function() {
 	var p = parseInt($("#list-page").val());
 	if (isNaN(p) || !isFinite(p)) p = 0;
 	p++;
@@ -261,5 +297,5 @@ setInterval(fetchCGStatus, 30 * 1000);
 fetchCGStatus();
 AutoGenerateFields();
 fetchAccountList();
-	
+
 });

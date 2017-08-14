@@ -2,111 +2,106 @@
 <head>
 	<script src="script.min.js"></script>
 	<link href="http://community.edgecast.steamstatic.com/public/shared/css/motiva_sans.css?v=Sd0odMs2NjL1" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="vgui.css">
 	<link rel="stylesheet" href="style.css">
 </head>
-<body>
-	<!--<div class="centered-content">
-		<div id="warning-cors-container">
-			You need to install an addon to disable CORS temporarily (<a href="https://chrome.google.com/webstore/detail/cors-toggle/omcncfnpmcabckcddookmnajignpffnh">CORS Toggle (Chrome)</a>, <a href="https://addons.mozilla.org/en-US/firefox/addon/cors-everywhere/">CORS Everywhere (Firefox)</a>)<br/>
-			<span id="warning-cors">Do not forget to disable these addons after you finish working with account generator - disabling CORS is a security threat!</span>
-			<br/>
-			<span style="font-size: 80%; color: #eee">Alternatively you can launch Chrome with <span style="font-family:monospace">--disable-web-security</span> flag and use incognito mode</span>
-		</div>
-	</div>
-	<br/>-->
-	<div id="container">
+<body class="vgui-container vgui-font">
+	<div id="container" class="vgui-outset">
 		<h2>nullifiedcat's steam account generator</h2>
-		<hr/>
-		<span class="monospace">##</span>'s will be replaced with zero-padded number <input id="number" type="text" placeholder="0"><br>
-		<table id="table-user">
-			<tr>
-				<td>Username</td>
-				<td><input id="x-username-c" type="checkbox">Random</td>
-				<td><input id="x-username-x" type="text" placeholder="RegExp"></td>
-				<td><input id="x-username-i" type="text" placeholder="Username..."></td>
-			</tr>
-			<tr>
-				<td colspan=4 class="auto" id="x-username-o"></span>
-			</tr>
-			<tr>
-				<td>Login</td>
-				<td><input id="x-login-c" type="checkbox" checked>Random</td>
-				<td><input id="x-login-x" type="text" placeholder="RegExp" value="[a-z0-9]{20}"></td>
-				<td><input id="x-login-i" type="text" placeholder="Login..."></td>
-			</tr>
-			<tr>
-				<td colspan=4 class="auto" id="x-login-o"></span>
-			</tr>
-			<tr>
-				<td>E-Mail</td>
-				<td><input id="x-email-c" type="checkbox" checked>Random</td>
-				<td><input id="x-email-x" type="text" placeholder="RegExp" value="[a-z0-9]{20}@[a-z0-9]{3}\.com"></td>
-				<td><input id="x-email-i" type="text" placeholder="E-Mail..."></td>
-			</tr>
-			<tr>
-				<td colspan=4 class="auto" id="x-email-o"></span>
-			</tr>
-			<tr>
-				<td>Password</td>
-				<td><input id="x-password-c" type="checkbox" checked>Random</td>
-				<td><input id="x-password-x" type="text" placeholder="RegExp" value="[a-z0-9]{20}"></td>
-				<td><input id="x-password-i" type="password" placeholder="Password..."></td>
-			</tr>
-			<tr>
-				<td colspan=4 class="auto" id="x-password-o"></span>
-			</tr>
-		</table>
-		<hr>
-		<br/>
-		<input id="cb-community" type="checkbox" checked>Setup community profile<br/>
-		<div id="community-container">
-		<div id="community" class="outlined">
-			<input id="cb-group" type="checkbox">Join steam group <input id="group" type="text" placeholder="" value=""><br/>
-			<table>
-			<tr>
-				<td>Profile</td>
-				<td>
-					<select id="privacy-profile">
-					<option value="1">Private</option>
-					<option value="2">Friends Only</option>
-					<option value="3" selected>Public</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td>Comments</td>
-				<td>
-					<select id="privacy-comments">
-					<option value="1">Private</option>
-					<option value="2">Friends Only</option>
-					<option value="3" selected>Public</option>
-					</select>
-				</td>
-			</tr>
+		<div class="vgui-outset">
+			<span class="monospace">##</span>'s will be replaced with zero-padded number <input id="number" type="text" placeholder="0"><br>
+			<table id="table-user">
+				<tr>
+					<td>Username</td>
+					<td><input id="x-username-c" type="checkbox">Random</td>
+					<td><input id="x-username-x" type="text" placeholder="RegExp"></td>
+					<td><input id="x-username-i" type="text" placeholder="Username..."></td>
+				</tr>
+				<tr>
+					<td colspan=4><input disabled class="auto" id="x-username-o"></td>
+				</tr>
+				<tr>
+					<td>Login</td>
+					<td><input id="x-login-c" type="checkbox" checked>Random</td>
+					<td><input id="x-login-x" type="text" placeholder="RegExp" value="[a-z0-9]{20}"></td>
+					<td><input id="x-login-i" type="text" placeholder="Login..."></td>
+				</tr>
+				<tr>
+					<td colspan=4><input disabled class="auto" id="x-login-o"></td>
+				</tr>
+				<tr>
+					<td>E-Mail</td>
+					<td><input id="x-email-c" type="checkbox" checked>Random</td>
+					<td><input id="x-email-x" type="text" placeholder="RegExp" value="[a-z0-9]{20}@[a-z0-9]{3}\.com"></td>
+					<td><input id="x-email-i" type="text" placeholder="E-Mail..."></td>
+				</tr>
+				<tr>
+					<td colspan=4><input disabled class="auto" id="x-email-o"></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input id="x-password-c" type="checkbox" checked>Random</td>
+					<td><input id="x-password-x" type="text" placeholder="RegExp" value="[a-z0-9]{20}"></td>
+					<td><input id="x-password-i" type="password" placeholder="Password..."></td>
+				</tr>
+				<tr>
+					<td colspan=4><input disabled type="password" class="auto" id="x-password-o"></td>
+				</tr>
 			</table>
-			<br/>
-			Custom URL <span class="small">steamcommunity.com/id/</span><input id="custom-url" class="progress"><input id="custom-url-check" type="button" value="Check">
-			<div id="avatar-container">
-				<input id="cb-avatar" type="checkbox" checked=true>Upload profile picture <input id="avatar" type="text" placeholder="http://..." value="http://i.imgur.com/l15FXXV.jpg"><img id="avatar-img"></img><br/>
+		</div>
+		<div class="vmiddle">
+			<input id="cb-community" type="checkbox" checked>Setup community profile<br/>
+		</div>
+		<div id="community-container" class="nopad">
+			<div id="community" class="vgui-outset">
+				<div class="vmiddle nopad">
+					Custom URL <span class="small">steamcommunity.com/id/ </span><input id="custom-url" class="progress"> <input id="custom-url-check" type="button" value="Check">
+				</div>
+				<table>
+				<tr>
+					<td>Profile</td>
+					<td>
+						<select id="privacy-profile">
+						<option value="1">Private</option>
+						<option value="2">Friends Only</option>
+						<option value="3" selected>Public</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Comments</td>
+					<td>
+						<select id="privacy-comments">
+						<option value="1">Private</option>
+						<option value="2">Friends Only</option>
+						<option value="3" selected>Public</option>
+						</select>
+					</td>
+				</tr>
+				</table>
+				<div class="vmiddle nopad">
+					<input id="cb-group" type="checkbox">Join steam group <input id="group" type="text" placeholder="" value=""><br/>
+				</div>
+				<div class="vmiddle nopad">
+					<input id="cb-avatar" type="checkbox" checked=true>Upload profile picture <input id="avatar" type="text" placeholder="http://..." value="http://i.imgur.com/l15FXXV.jpg"><img id="avatar-img"></img><br/>
+				</div>
+				<div class="vmiddle nopad">
+					<input id="cb-summary" type="checkbox" checked=true>Set profile summary
+				</div>
+				<textarea id="ta-summary" class="vgui-inset"></textarea><br/>
 			</div>
-			<input id="cb-summary" type="checkbox" checked=true>Set profile summary
-			<br/>
-			<br/>
-			<textarea id="ta-summary"></textarea><br/>
 		</div>
-		</div>
-		<br/>
 		<div id="control-buttons">
 			<input id="create" type="button" value="Create">
 			<input id="next-account" type="button" value="Next account">
 		</div>
 		<div id="status">Ready</div>
 	</div>
-	<div id="container-right">
+	<div id="container-right" class="vgui-outset">
 		<h2>List of generated accounts</h2>
 		<hr/>
-		<table id="list" class="monospace-table">
-			<tbody>				
+		<table id="list" class="monospace vgui-table vgui-inset">
+			<tbody>
 				<tr id="list-header">
 					<td>Username</td>
 					<td>Login</td>
@@ -118,46 +113,46 @@
 			</tbody>
 		</table>
 		<div id="list-controls">
-			<input id="list-prev" type="button" value="<">
+			<input id="list-prev" class="vgui-button-centered" type="button" value="<">
 			<input id="list-page" value="0" size=3>
-			<input id="list-next" type="button" value=">">
+			<input id="list-next" class="vgui-button-centered" type="button" value=">">
 			<input id="list-refresh" type="button" value="Refresh">
 			<br>
 			<span id="list-info">Showing accounts <span id="list-info-first">0</span>..<span id="list-info-last">0</span> out of <span id="list-info-total">0</span></span>
 		</div>
-		<h2>Continuous Generation</h2>
-		<hr/>
-		<div id="cg-status">
-			CG is <span id="cg-active" class="bad-text">unavailable</span> and has <span id="cg-count">0</span> account(s) available. <span id="cg-used" class="bad-text">0</span> accounts have been used.
-			<br/>Interval between account creation is <span id="cg-interval" class="good-text">0</span> seconds.
-		</div>
-		<input id="cg-start" value="Start CG" type="button">
-		<input id="cg-stop" value="Stop CG" type="button">
-		<input id="cg-refresh" value="Refresh" type="button">
-		<input id="cg-pop" value="Pop" type="button">
-		<input id="cg-login" value="Login" type="button">
-		<br/>
-		<div id="cg-popped-account" class="hidden outlined">
-			<span>Last popped account</span>
+		<div class="vgui-outset">
+			<h2>Continuous Generation</h2>
+			<hr/>
+			<div id="cg-status">
+				CG is <span id="cg-active" class="bad-text">unavailable</span> and has <span id="cg-count">0</span> account(s) available. <span id="cg-used">0</span> accounts have been used.
+				<br/>Interval between account creation is <span id="cg-interval" class="good">0</span> seconds.
+			</div>
+			<input id="cg-start" value="Start CG" type="button">
+			<input id="cg-stop" value="Stop CG" type="button">
+			<input id="cg-refresh" value="Refresh" type="button">
+			<input id="cg-pop" value="Pop" type="button">
+			<input id="cg-login" value="Login" type="button">
 			<br/>
-			<table id="cg-account" class="monospace-table table-left-bold">
-				<tr>
-					<td>Login</td>
-					<td id="cg-acc-login">unknown</td>
-				</tr>
-				<tr>
-					<td>Password</td>
-					<td id="cg-acc-password">unknown</td>
-				</tr>
-				<tr>
-					<td>Profile</td>
-					<td id="cg-acc-profile">unknown</td>
-				</tr>
-				<tr>
-					<td>Created</td>
-					<td id="cg-acc-created">unknown</td>
-				</tr>
-			</table>
+			<div id="cg-popped-account" class="hidden">
+				<table id="cg-account" class="monospace-table table-left-bold vgui-outset">
+					<tr>
+						<td>Login</td>
+						<td id="cg-acc-login">unknown</td>
+					</tr>
+					<tr>
+						<td>Password</td>
+						<td id="cg-acc-password">unknown</td>
+					</tr>
+					<tr>
+						<td>Profile</td>
+						<td id="cg-acc-profile">unknown</td>
+					</tr>
+					<tr>
+						<td>Created</td>
+						<td id="cg-acc-created">unknown</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 	</div>
 </body>

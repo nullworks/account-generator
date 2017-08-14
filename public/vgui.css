@@ -1,0 +1,164 @@
+
+.vgui-font {
+    color: #d8dfd3;
+
+    font-family: "Tahoma", sans-serif;
+    font-size: 10px;
+
+    font-smooth: none;
+    -webkit-font-smoothing: none;
+}
+
+input {
+    text-align: left;
+}
+
+input:not([type=button]), .vgui-inset {
+    border-bottom: 1px solid #899180;
+    border-right: 1px solid #899180;
+    border-top: 1px solid #282f22;
+    border-left: 1px solid #282f22;
+    background: #3f4737;
+    color: #d8dfd3;
+}
+
+input[type=button], .vgui-outset {
+    border-top: 1px solid #899180;
+    border-left: 1px solid #899180;
+    border-bottom: 1px solid #282f22;
+    border-right: 1px solid #282f22;
+    color: #d8dfd3;
+    background: #4d5844;
+}
+
+.vgui-container {
+    padding: 4px;
+    background: #4d5844;
+}
+
+.vgui-select {
+    display: block;
+    min-width: 8em;
+    padding: 3px;
+    padding-right: 16px;
+    border-bottom: 1px solid #899180;
+    border-right: 1px solid #899180;
+    border-top: 1px solid #282f22;
+    border-left: 1px solid #282f22;
+    background: url('vgui-dropdown.png') #3f4737 no-repeat right 2px center;
+    color: #d8dfd3;
+}
+
+.vgui-select-hidden {
+    display: none;
+}
+
+.vgui-select-container {
+    position: relative;
+}
+
+.vgui-select-list {
+    display: block;
+    overflow: hidden;
+    margin: 0;
+    box-sizing: border-box;
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    list-style: none;
+    z-index: 3;
+    padding: 0;
+    margin-top: 2px;
+}
+
+.vgui-select-option {
+    padding: 3;
+    width: 100%;
+}
+
+.vgui-select-option:hover {
+    background: #958831;
+}
+
+::selection {
+    background: rgba(149, 136, 49, 0.996);
+    color: white;
+}
+
+.vgui-table {
+    font-size: 10px;
+    border-collapse: separate;
+    border-spacing: 0px;
+}
+
+.vgui-table td {
+    padding: 2px 6px;
+    min-width: 3em;
+}
+
+.vgui-table tbody tr:first-child {
+    background: #4d5844;
+}
+
+.vgui-table tbody tr:first-child td {
+    border-top: 1px solid #899180;
+    border-left: 1px solid #899180;
+    border-bottom: 1px solid #282f22;
+    border-right: 1px solid #282f22;
+}
+
+input:not([type=checkbox]) {
+    padding: 3px;
+    font-size: 10px;
+    min-width: 62px;
+}
+
+input[type=checkbox]:before {
+    border-bottom: 1px solid #899180;
+    border-right: 1px solid #899180;
+    border-top: 1px solid #282f22;
+    border-left: 1px solid #282f22;
+    background: #3f4737;
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+}
+
+.vgui-button-centered {
+    text-align: center;
+}
+
+input[type=checkbox]:checked:before {
+    background: url('vgui-checkbox.png') #3f4737;
+}
+
+[disabled], .vgui-disabled {
+    background: #4b5742 !important;
+    color: #a2ab96 !important;
+}
+
+.noselect {
+    cursor: default;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+option:hover {
+    background: #958831;
+}
+
+*:focus {
+    outline: none;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #282f22;
+    border-bottom: 1px solid #899180;
+}

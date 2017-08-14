@@ -52,7 +52,7 @@ function fetchAccountList() {
 	request(SERVER + "list/" + $("#list-page").val() * 20 + "/20", function(e, r, b) {
 		if (e) {
 			console.log(e);
-			return;	
+			return;
 		}
 		var data = JSON.parse(b);
 		$("#list tr").slice(1).remove();
@@ -83,7 +83,7 @@ function MakeAccount() {
 	if (acc) {
 		status.text("Creating account");
 		request.post({
-			url: SERVER + "create", 
+			url: SERVER + "create",
 			body: JSON.stringify(acc),
 			headers: {
 				"Content-Type": "application/json"
@@ -109,7 +109,7 @@ function ValidateAndStoreFields() {
 	// Basic data
 	var f = "username login password email".split(" ");
 	for (var i in f) {
-		var v = $("#x-" + f[i] + "-o").text();
+		var v = $("#x-" + f[i] + "-o").val();
 		if (!v.length) return false;
 		account[f[i]] = v;
 	}
@@ -152,7 +152,7 @@ function AutoGenerateFields() {
 			}
 		} catch (e) {}
 		v = v.replace(/#+/g, function(match) { return pad(accountSequenceNumber, match.length); });
-		$("#x-" + z + "-o").text(v);
+		$("#x-" + z + "-o").val(v);
 	}
 	$("#number").val(accountSequenceNumber);
 }
@@ -161,26 +161,27 @@ function fetchCGStatus() {
 	request(SERVER + "cg/status", function(e, r, b) {
 		try {
 			var data = JSON.parse(b);
-			$("#cg-active").text(data.active ? "enabled" : "disabled").attr("class", data.active ? "good-text" : "bad-text");
+			$("#cg-active").text(data.active ? "enabled" : "disabled").attr("class", data.active ? "good" : "bad");
 			$("#cg-count").text(data.accounts.count);
 			$("#cg-used").text(data.accounts.used);
 			$("#cg-interval").text(Math.floor(data.timeout / 1000));
 		} catch (e) {
-			$("#cg-active").text("unavailable").attr("class", "bad-text");
+			$("#cg-active").text("unavailable").attr("class", "bad");
 			console.log(e);
-			return;	
+			return;
 		}
 	});
 }
 
 $(() => {
 
-console.log($("#table-user input"));
+vguiSelect($);
 
 $("#table-user input").on("input", AutoGenerateFields);
 
 $("#custom-url").on("input", function() {
 	$(this).val($(this).val().replace(/[^a-z0-9_]/gi, ''));
+	$(this).removeClass('good bad').addClass('progress');
 });
 
 $("#avatar").on("input", function() {
@@ -191,7 +192,7 @@ $("#number").on("input", function() {
 	var nn = accountSequenceNumber;
 	try {
 		nn = parseInt($(this).val());
-	} catch(e) {}	
+	} catch(e) {}
 	accountSequenceNumber = nn;
 	AutoGenerateFields();
 });
@@ -214,7 +215,7 @@ $("#list-prev").on("click", function() {
 	$("#list-page").val(p)
 	fetchAccountList();
 });
-$("#list-next").on("click", function() {	
+$("#list-next").on("click", function() {
 	var p = parseInt($("#list-page").val());
 	if (isNaN(p) || !isFinite(p)) p = 0;
 	p++;
@@ -254,6 +255,10 @@ $("#cg-login").on("click", function() {
 	StartSteam(username, password);
 });
 
+$("#table-user input[type=checkbox]").on('change', function() {
+	$(this).parent().parent().find('[placeholder=RegExp]').prop('disabled', !$(this).prop('checked'))
+});
+
 status = $("#status");
 $("#avatar-img").attr("src", $("#avatar").val());
 // Update CG status every 30 seconds
@@ -261,5 +266,5 @@ setInterval(fetchCGStatus, 30 * 1000);
 fetchCGStatus();
 AutoGenerateFields();
 fetchAccountList();
-	
+
 });

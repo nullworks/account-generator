@@ -109,7 +109,7 @@ function ValidateAndStoreFields() {
 	// Basic data
 	var f = "username login password email".split(" ");
 	for (var i in f) {
-		var v = $("#x-" + f[i] + "-o").text();
+		var v = $("#x-" + f[i] + "-o").val();
 		if (!v.length) return false;
 		account[f[i]] = v;
 	}
@@ -152,7 +152,7 @@ function AutoGenerateFields() {
 			}
 		} catch (e) {}
 		v = v.replace(/#+/g, function(match) { return pad(accountSequenceNumber, match.length); });
-		$("#x-" + z + "-o").text(v);
+		$("#x-" + z + "-o").val(v);
 	}
 	$("#number").val(accountSequenceNumber);
 }
@@ -186,8 +186,17 @@ $('select').each(function() {
 	list.hide();
 	el.on('click', function(event) {
 		event.stopPropagation();
-		el.addClass('vgui-select-active');
-		list.show();
+		$('.vgui-select-active').not(this).each(function() {
+			$(this).removeClass('vgui-select-active');
+			$(this).find('.vgui-select-list').hide();
+		});
+		if (el.hasClass('vgui-select-active')) {
+			el.removeClass('vgui-select-active');
+			list.hide();
+		} else {
+			el.addClass('vgui-select-active');
+			list.show();
+		}
 	});
 	el.append(list);
 	self.find('option').each(function() {

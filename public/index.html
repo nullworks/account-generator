@@ -128,7 +128,8 @@
 		<h2>Continious Generation</h2>
 		<hr/>
 		<div id="cg-status">
-			CG is <span id="cg-active" class="bad-text">disabled</span> and has <span id="cg-count">0</span> account(s) available.
+			CG is <span id="cg-active" class="bad-text">unavailable</span> and has <span id="cg-count">0</span> account(s) available. <span id="cg-used" class="bad-text">0</span> accounts have been used.
+			<br/>Interval between account creation is <span id="cg-interval" class="good-text">0</span> seconds.
 		</div>
 		<input id="cg-start" value="Start CG" type="button">
 		<input id="cg-stop" value="Stop CG" type="button">
@@ -151,6 +152,10 @@
 				<tr>
 					<td>Profile</td>
 					<td id="cg-acc-profile">unknown</td>
+				</tr>
+				<tr>
+					<td>Created</td>
+					<td id="cg-acc-created">unknown</td>
 				</tr>
 			</table>
 		</div>

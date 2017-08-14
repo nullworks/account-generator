@@ -9,6 +9,7 @@ const bodyparser = require("body-parser");
 const querystring = require("querystring");
 const RandExp = require("randexp");
 const _ = require("underscore");
+const fs = require("fs");
 
 const PORT = 8080;
 
@@ -84,7 +85,7 @@ function makeAccount(user, data, callback) {
 		if (result == SteamUser.EResult.OK) {
 			callback(null, data);
 		} else {
-			callback("Steam returned error result code: " + result);
+			callback(result);
 		}
 	});
 }
@@ -179,19 +180,31 @@ const CG_MIN_TIMEOUT = 45 * 1000;
 const cgAccounts = {
 	status: function() {
 		return {
-			count: this.array.length
+			count: this.array.length,
+			used: this.used
 		};
 	},
 	load: function() {
 		try {
-			this.array = jsonfile.readFileSync("accounts.cg.json");
+			var data = jsonfile.readFileSync("accounts.cg.json");
+			if (_.isArray(data)) {
+				this.array = data;
+				this.used = 0;
+			} else if (_.isObject(data)) {
+				this.array = data.array;
+				this.used = data.used;
+			} else throw "malformed accounts.cg.json file";
 		} catch (err) {
 			this.array = [];
+			this.used = 0;
 			console.log("[CG] Error loading data:", err);
 		}
 	},
 	save: function() {
-		jsonfile.writeFileSync("accounts.cg.json", this.array);
+		jsonfile.writeFileSync("accounts.cg.json", {
+			array: this.array,
+			used: this.used
+		});
 	},
 	push: function(account) {
 		console.log("[CG] Storing account");
@@ -200,10 +213,14 @@ const cgAccounts = {
 	},
 	pop: function() {
 		console.log("[CG] Popping account");
-		return this.array.shift();
+		var acc = this.array.shift();
+		this.used++;
 		this.save();
+		fs.appendFileSync("accs-cg-used.txt", `${acc.created} ${Date.now()} ${acc.login} ${acc.password} ${acc.steamID}\n`);
+		return acc;
 	},
-	array: []
+	array: [],
+	used: 0
 };
 
 // Continious Generation
@@ -250,7 +267,7 @@ const cg = {
 				if (err) {
 					console.log(`[CG] Account creation failed: ${err} ${data}`);
 					return;
-				}
+				}				
 				data.created = true;
 				setupAccount(data, function(err, data) {
 					if (err) {
@@ -333,6 +350,8 @@ app.get("/cg/pop", function(req, res) {
 		res.status(429).end();
 	}
 });
+
+reloadCGConfig();
 
 app.listen(PORT, function() {
 	console.log("Listening on port", PORT);

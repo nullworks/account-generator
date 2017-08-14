@@ -159,14 +159,17 @@ function AutoGenerateFields() {
 
 function fetchCGStatus() {
 	request(SERVER + "cg/status", function(e, r, b) {
-		if (e) {
-			$("#cg-active").text("broken").attr("class", "bad-text");
+		try {
+			var data = JSON.parse(b);
+			$("#cg-active").text(data.active ? "enabled" : "disabled").attr("class", data.active ? "good-text" : "bad-text");
+			$("#cg-count").text(data.accounts.count);
+			$("#cg-used").text(data.accounts.used);
+			$("#cg-interval").text(Math.floor(data.timeout / 1000));
+		} catch (e) {
+			$("#cg-active").text("unavailable").attr("class", "bad-text");
 			console.log(e);
 			return;	
 		}
-		var data = JSON.parse(b);
-		$("#cg-active").text(data.active ? "enabled" : "disabled").attr("class", data.active ? "good-text" : "bad-text");
-		$("#cg-count").text(data.accounts.count);
 	});
 }
 
@@ -240,7 +243,8 @@ $("#cg-pop").on("click", function() {
 		var data = JSON.parse(b);
 		$("#cg-acc-login").text(data.account.login);
 		$("#cg-acc-password").text(data.account.password);
-		$("#cg-acc-profile").html($("<a></a>").attr("href", "https://steamcommunity.com/profiles/" + data.account.steamID).text("Link"));
+		$("#cg-acc-profile").html($("<a></a>").attr("href", "https://steamcommunity.com/profiles/" + data.account.steamID).attr("target", "_blank").text("Link"));
+		$("#cg-acc-created").text(new Date(data.account.created).toLocaleString());
 		$("#cg-popped-account").removeClass("hidden");
 	});
 });

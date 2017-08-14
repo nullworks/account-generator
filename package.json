@@ -19,6 +19,7 @@
     "randexp": "^0.4.5",
     "steam-user": "^3.21.7",
     "steamcommunity": "^3.31.0",
+    "time-stamp": "^2.0.0",
     "underscore": "^1.8.3"
   }
 }

@@ -132,3 +132,14 @@ tr td * {
 #list-controls {
 	text-align: center;
 }
+
+#footer {
+    position: absolute;
+    bottom: 16;
+    left: 0;
+    width: 100%;
+}
+
+#footer span {
+    padding: 4px;
+}

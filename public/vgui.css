@@ -81,6 +81,11 @@ input[type=button], .vgui-outset {
     background: #958831;
 }
 
+::selection {
+    background: rgba(149, 136, 49, 0.996);
+    color: white;
+}
+
 .vgui-table {
     font-size: 10px;
     border-collapse: separate;

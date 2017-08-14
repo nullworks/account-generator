@@ -199,20 +199,27 @@ $('select').each(function() {
 		}
 	});
 	el.append(list);
+	var so = self.find('option')[0];
 	self.find('option').each(function() {
+		if ($(this).attr('selected')) so = $(this);
 		var opt = $('<li />');
 		opt.addClass('vgui-select-option');
 		opt.attr('data-value', $(this).val());
 		opt.text($(this).text());
 		opt.on('click', function() {
 			event.stopPropagation();
-			el.attr('data-value', $(this).attr('data-value'));
+			self.val($(this).attr('data-value'));
+			el.attr('data-value', $(this).text());
 			el.find('.vgui-select-text').text($(this).text());
 			el.removeClass('vgui-select-active');
 			list.hide();
 		});
 		list.append(opt);
 	});
+	if (so) {
+		el.attr('data-value', so.val());
+		el.find('.vgui-select-text').text(so.text());
+	}
 	$(document).on('click', function() {
 		el.removeClass('vgui-select-active');
 		list.hide();

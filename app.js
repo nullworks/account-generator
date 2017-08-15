@@ -16,7 +16,7 @@ const PORT = 8080;
 const communityGlobal = new SteamCommunity();
 const SteamUser = require("steam-user");
 const steamUser = new SteamUser();
-steamUser.logOn();	
+steamUser.logOn();
 
 var accounts = [];
 try {
@@ -133,7 +133,7 @@ app.get("/list/:from/:count", function(req, res) {
 		res.status(400).send("NaN");
 		return;
 	}
-	var accs = accounts.slice(Math.max(0, accounts.length - 1 - from - count), accounts.length - from);
+	var accs = accounts.slice(Math.max(0, accounts.length - 1 - from - count), Math.max(0, accounts.length - from));
 	var result = {
 		total: accounts.length,
 		from: from,
@@ -262,12 +262,18 @@ const cg = {
 				cg_account.username = cg.cfg.username.data;
 			}
 			console.log("[CG] Generating account:", cg_account.login);
-			
+
 			makeAccount(this.user, cg_account, function(err, data) {
 				if (err) {
 					console.log(`[CG] Account creation failed: ${err} ${data}`);
 					return;
-				}				
+				}
+				cg.user.logOff();
+				cg.user = new SteamUser();
+				cg.user.logOn({
+					accountName: data.login,
+					password: data.password
+				});
 				data.created = true;
 				setupAccount(data, function(err, data) {
 					if (err) {

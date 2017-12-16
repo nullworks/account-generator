@@ -3,7 +3,7 @@ const pad = require("pad-number");
 const RandExp = require("randexp");
 const request = require("browser-request");
 
-const SERVER = "http://localhost:8080/";
+const SERVER = "/";
 const SERVER_API = SERVER + 'api/';
 
 var gid = "";

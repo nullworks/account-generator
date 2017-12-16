@@ -1,3 +1,3 @@
-npm install -g browserify
+sudo npm install -g browserify
 npm install
 browserify script.js -o public/script.min.js

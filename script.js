@@ -4,6 +4,7 @@ const RandExp = require("randexp");
 const request = require("browser-request");
 
 const SERVER = "http://localhost:8080/";
+const SERVER_API = SERVER + 'api/';
 
 var gid = "";
 
@@ -49,7 +50,7 @@ function PushAccount(acc) {
 }
 
 function fetchAccountList() {
-	request(SERVER + "list/" + $("#list-page").val() * 20 + "/20", function(e, r, b) {
+	request(SERVER_API + "list/" + $("#list-page").val() * 20 + "/20", function(e, r, b) {
 		if (e) {
 			console.log(e);
 			return;
@@ -69,7 +70,7 @@ var accountSequenceNumber = 0;
 
 function CheckCustomURL() {
 	$("#custom-url").attr("class", "progress");
-	request(SERVER + "check/" + $("#custom-url").val(), function(err, res, body) {
+	request(SERVER_API + "check/" + $("#custom-url").val(), function(err, res, body) {
 		if (body == "1") {
 			$("#custom-url").attr("class", "good");
 		} else {
@@ -83,7 +84,7 @@ function MakeAccount() {
 	if (acc) {
 		status.text("Creating account");
 		request.post({
-			url: SERVER + "create",
+			url: SERVER_API + "create",
 			body: JSON.stringify(acc),
 			headers: {
 				"Content-Type": "application/json"
@@ -136,9 +137,23 @@ function ValidateAndStoreFields() {
 	return account;
 }
 
-function StartSteam(username, password) {
+function StartSteam(username, password, opts) {
 	status.text("Starting steam!");
-	request(SERVER + "steam/login/" + username + "/" + password, function() {});
+	request.post({
+		url: "steam/login/" + username + "/" + password,
+		body: JSON.stringify(opts || []),
+		headers: {
+			"Content-Type": "application/json"
+		}
+	}, function(e, r, b) {
+		console.log(e,b);
+		if (r.statusCode == 200) {
+			status.text("Started!");
+		} else {
+			status.text("Starting");
+		}
+	});
+	//request(SERVER + "steam/login/" + username + "/" + password, function() {});
 }
 
 function AutoGenerateFields() {
@@ -158,7 +173,7 @@ function AutoGenerateFields() {
 }
 
 function fetchCGStatus() {
-	request(SERVER + "cg/status", function(e, r, b) {
+	request(SERVER_API + "cg/status", function(e, r, b) {
 		try {
 			var data = JSON.parse(b);
 			$("#cg-active").text(data.active ? "enabled" : "disabled").attr("class", data.active ? "good" : "bad");
@@ -224,18 +239,18 @@ $("#list-next").on("click", function() {
 });
 
 $("#cg-start").on("click", function() {
-	request(SERVER + "cg/start", function() {
+	request(SERVER_API + "cg/start", function() {
 		fetchCGStatus();
 	});
 });
 $("#cg-stop").on("click", function() {
-	request(SERVER + "cg/stop", function() {
+	request(SERVER_API + "cg/stop", function() {
 		fetchCGStatus();
 	});
 });
 $("#cg-refresh").on("click", fetchCGStatus);
 $("#cg-pop").on("click", function() {
-	request(SERVER + "cg/pop", function(e, r, b) {
+	request(SERVER_API + "cg/pop", function(e, r, b) {
 		fetchCGStatus();
 		if (e) {
 			console.log(e);
@@ -252,7 +267,23 @@ $("#cg-pop").on("click", function() {
 $("#cg-login").on("click", function() {
 	var username = $("#cg-acc-login").text();
 	var password = $("#cg-acc-password").text();
-	StartSteam(username, password);
+	StartSteam(username, password, []);
+});
+$("#cg-tf2").on("click", function() {
+	var username = $("#cg-acc-login").text();
+	var password = $("#cg-acc-password").text();
+	StartSteam(username, password, [ '-applaunch 440', '-w 1920', '-h 1080', '-fullscreen', '-novid' ]);
+});
+$('#api-login-button').on('click', () => {
+    let password = $('#api-password').val();
+    request.post({
+        uri: SERVER_API + "auth",
+        form: {
+            password: password
+        }
+    }, (e, r, b) => {
+        console.log(b);
+    });
 });
 
 $("#table-user input[type=checkbox]").on('change', function() {

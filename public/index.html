@@ -7,6 +7,12 @@
 	<script src="vgui-select.js"></script>
 </head>
 <body class="vgui-container vgui-font">
+    <div id="container-login" class="vgui-outset">
+        If you don't see any data, please login using the password shown in console and refresh the page
+        <input id="api-password" type="text" placeholder="Password">
+        <input id="api-login-button" type="button" value="Login">
+    </div>
+    <br>
 	<div id="container" class="vgui-outset">
 		<h2>nullifiedcat's steam account generator</h2>
 		<div class="vgui-outset">
@@ -133,6 +139,7 @@
 			<input id="cg-refresh" value="Refresh" type="button">
 			<input id="cg-pop" value="Pop" type="button">
 			<input id="cg-login" value="Login" type="button">
+			<input id="cg-tf2" value="Start TF2" type="button">
 			<br/>
 			<div id="cg-popped-account" class="hidden">
 				<table id="cg-account" class="monospace-table table-left-bold vgui-outset">

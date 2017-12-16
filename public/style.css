@@ -95,6 +95,12 @@ img {
 
 .hidden { display: none !important }
 
+#container-login
+{
+    display: inline-block;
+    margin-bottom: 3px;
+}
+
 #container, #container-right {
 	display: inline-block;
 	vertical-align: top;

@@ -13,6 +13,12 @@ class SimpleAuth
     }
     middleware(req, res, next)
     {
+        if (!req.session.auth && (req.ip == '::1' || req.ip == '127.0.0.1' || req.ip == '::ffff:127.0.0.1'))
+        {
+            console.log(`Auth: ${req.ip} by LOCAL`);
+            req.session.auth = 1;
+        }
+
         if (req.url.indexOf('api') < 0 || req.session.auth)
         {
             next();

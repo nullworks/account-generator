@@ -1,4 +1,3 @@
-git fetch
 git pull
 npm install
-browserify script.js -o public/script.min.js
+browserify script.js -o public/bundle.js

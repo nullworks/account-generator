@@ -13,6 +13,18 @@ const fs = require("fs");
 
 const PORT = 8080;
 
+const npid = require('npid');
+try
+{
+    const pid = npid.create('/tmp/ncat-account-generator.pid');
+    pid.removeOnExit();
+}
+catch (error)
+{
+    console.log(`Account generator already running?`);
+    process.exit(1);
+}
+
 const communityGlobal = new SteamCommunity();
 const SteamUser = require("steam-user");
 var steamUser = new SteamUser();

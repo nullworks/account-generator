@@ -15,7 +15,7 @@ const PORT = 8080;
 
 const communityGlobal = new SteamCommunity();
 const SteamUser = require("steam-user");
-const steamUser = new SteamUser();
+var steamUser = new SteamUser();
 steamUser.logOn();
 
 var accounts = [];
@@ -90,12 +90,25 @@ function makeAccount(user, data, callback) {
 	});
 }
 
+const session = require('express-session');
+
+app.use(session({
+    secret: require('randomstring').generate(16),
+    resave: false,
+    saveUninitialized: false
+}))
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
+const SimpleAuth = require('./auth');
+const basicAuth = new SimpleAuth(app);
+basicAuth.storeAPIKey('/tmp/accgen2-apikey');
+console.log('Login with password', basicAuth.password);
+fs.writeFileSync('/tmp/cat-accgen2-password', basicAuth.password);
+
 // Check if custom URL is available
-app.get("/check/:url", function(req, res) {
+app.get("/api/check/:url", function(req, res) {
 	communityGlobal.getSteamUser(req.params.url, function (error, user) {
 		if (error && error.toString().indexOf("not be found") > 0) {
 			res.send("1");
@@ -106,7 +119,7 @@ app.get("/check/:url", function(req, res) {
 });
 
 // Return new CAPTCHA gid
-app.get("/captcha", function(req, res) {
+app.get("/api/captcha", function(req, res) {
 	request("https://store.steampowered.com/join/refreshcaptcha?count=1", function(e, r, b) {
 		if (e) {
 			console.log(err);
@@ -126,7 +139,7 @@ app.get("/captcha", function(req, res) {
 });
 
 // Return N newest accounts from the list, return account number
-app.get("/list/:from/:count", function(req, res) {
+app.get("/api/list/:from/:count", function(req, res) {
 	var from = parseInt(req.params.from);
 	var count = parseInt(req.params.count);
 	if (isNaN(from) || isNaN(count)) {
@@ -144,7 +157,7 @@ app.get("/list/:from/:count", function(req, res) {
 });
 
 // Create an account, return its data on success
-app.post("/create", function(req, res) {
+app.post("/api/create", function(req, res) {
 	console.log("Creating account", req.body);
 	makeAccount(steamUser, req.body, function(err, data) {
 		if (err) {
@@ -152,6 +165,13 @@ app.post("/create", function(req, res) {
 			res.status(500).send(JSON.stringify(data));
 			return;
 		}
+		console.log('Created?');
+		steamUser.logOff();
+		steamUser = new SteamUser();
+		steamUser.logOn({
+			accountName: data.login,
+			password: data.password
+		});
 		data.created = true;
 		setupAccount(data, function(err, data) {
 			if (err) {
@@ -167,10 +187,11 @@ app.post("/create", function(req, res) {
 });
 
 // Start steam and log in to account
-app.get("/steam/login/:username/:password", function(req, res) {
+app.post("/api/steam/login/:username/:password", function(req, res) {
 	const killall = spawn("killall", ["-9", "steam"]);
 	killall.on("exit", () => {
-		spawn("steam", ["-login", req.params.username, req.params.password]);
+		console.log(["-login", req.params.username, req.params.password].concat(req.body));
+		spawn("steam", ["-login", req.params.username, req.params.password].concat(req.body));
 	});
 	res.status(200).end();
 });
@@ -210,6 +231,7 @@ const cgAccounts = {
 		console.log("[CG] Storing account");
 		this.array.push(account);
 		this.save();
+		console.log("[CG] Saving complete");
 	},
 	pop: function() {
 		console.log("[CG] Popping account");
@@ -313,17 +335,17 @@ cgAccounts.load();
 cg.user = new SteamUser();
 cg.user.logOn();
 
-app.get("/cg/start", function(req, res) {
+app.get("/api/cg/start", function(req, res) {
 	cg.start();
 	res.end();
 });
 
-app.get("/cg/stop", function(req, res) {
+app.get("/api/cg/stop", function(req, res) {
 	cg.stop();
 	res.end();
 });
 
-app.get("/cg/status", function(req, res) {
+app.get("/api/cg/status", function(req, res) {
 	res.send({
 		active: cg.active,
 		timeout: cg.cfg.timeout,
@@ -340,12 +362,12 @@ function reloadCGConfig() {
 	} catch (e) {}
 }
 
-app.get("/cg/reload", function(req, res) {
+app.get("/api/cg/reload", function(req, res) {
 	reloadCGConfig();
 	res.end();
 });
 
-app.get("/cg/pop", function(req, res) {
+app.get("/api/cg/pop", function(req, res) {
 	var acc = cgAccounts.pop();
 	if (acc) {
 		res.send({

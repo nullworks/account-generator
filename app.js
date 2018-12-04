@@ -26,9 +26,9 @@ catch (error)
 }
 
 const communityGlobal = new SteamCommunity();
-const SteamUser = require("steam-user");
-var steamUser = new SteamUser();
-steamUser.logOn();
+//const SteamUser = require("steam-user");
+//var steamUser = new SteamUser();
+//steamUser.logOn();
 
 var accounts = [];
 try {
@@ -302,12 +302,12 @@ const cg = {
 					console.log(`[CG] Account creation failed: ${err} ${data}`);
 					return;
 				}
-				cg.user.logOff();
-				cg.user = new SteamUser();
-				cg.user.logOn({
-					accountName: data.login,
-					password: data.password
-				});
+				//cg.user.logOff();
+				//cg.user = new SteamUser();
+				//cg.user.logOn({
+				//	accountName: data.login,
+				//	password: data.password
+				//});
 				data.created = true;
 				setupAccount(data, function(err, data) {
 					if (err) {
@@ -344,8 +344,8 @@ const cg = {
 };
 
 cgAccounts.load();
-cg.user = new SteamUser();
-cg.user.logOn();
+//cg.user = new SteamUser();
+//cg.user.logOn();
 
 app.get("/api/cg/start", function(req, res) {
 	cg.start();

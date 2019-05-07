@@ -210,6 +210,17 @@ app.post("/api/steam/login/:username/:password", function(req, res) {
 
 const CG_MIN_TIMEOUT = 45 * 1000;
 
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
+
 const cgAccounts = {
 	status: function() {
 		return {
@@ -231,6 +242,26 @@ const cgAccounts = {
 			this.array = [];
 			this.used = 0;
 			console.log("[CG] Error loading data:", err);
+			try
+			{
+				var data = jsonfile.readFileSync("accounts.default.json");
+				if (_.isArray(data)) {
+					this.array = data;
+					shuffle(this.array);
+					this.used = 0;
+					console.log("Loaded default data");
+				} else if (_.isObject(data)) {
+					this.array = data.array;
+					shuffle(this.array);
+					this.used = 0;
+					console.log("Loaded default data");
+				} else throw "malformed accounts.default.json file";
+			}
+			catch (err) {
+				this.array = [];
+				this.used = 0;
+				console.log("[DEFAULT] Error loading data:", err);
+			}
 		}
 	},
 	save: function() {

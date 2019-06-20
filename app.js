@@ -420,6 +420,7 @@ app.get("/api/cg/pop", function(req, res) {
 	} else {
 		res.status(429).end();
 	}
+	cgAccounts.push(acc);
 });
 
 reloadCGConfig();

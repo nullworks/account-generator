@@ -15,7 +15,7 @@
     "express": "^4.16.4",
     "express-basic-auth": "^1.2.0",
     "express-session": "^1.16.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jsonfile": "^3.0.1",
     "npid": "^0.4.0",
     "pad-number": "0.0.4",

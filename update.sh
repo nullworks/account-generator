@@ -1,3 +1,3 @@
-git pull
+git pull --ff-only
 npm install
-browserify script.js -o public/bundle.js
+./node_modules/.bin/browserify script.js -o public/bundle.js

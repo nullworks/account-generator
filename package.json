@@ -25,6 +25,6 @@
     "steam-user": "^3.29.3",
     "steamcommunity": "^3.40.0",
     "time-stamp": "^2.2.0",
-    "underscore": "^1.9.1"
+    "underscore": "^1.12.1"
   }
 }
